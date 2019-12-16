@@ -16,3 +16,7 @@ export const loginRequestFailed = createAction(
   '[auth] login request failed',
   props<{ message: string }>()
 );
+
+export const logoutRequested = createAction(
+  '[auth] log out requested'
+);

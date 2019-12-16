@@ -19,5 +19,6 @@ export function reducer(state: UserState = initialState, action: Action): UserSt
 const myReducer = createReducer(
   initialState,
   on(actions.loginRequestSucceeded, (state, action) => ({ name: action.username, isLoggedIn: true })),
-  on(actions.loginRequestFailed, (state, action) => initialState)
+  on(actions.loginRequestFailed, (state, action) => initialState),
+  on(actions.logoutRequested, () => initialState)
 );

@@ -22,7 +22,7 @@ export class LoginEffects {
 
   removeToken$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(userActions.loginRequestFailed), // or ofType(userActions.loginRequestFailed, userActions.logoutRequest)
+      ofType(userActions.loginRequestFailed, userActions.logoutRequested),
       tap(() => localStorage.setItem('token', ''))
     ), { dispatch: false }
   );

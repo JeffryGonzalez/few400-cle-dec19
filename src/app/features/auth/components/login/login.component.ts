@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AuthState, selectUserIsLoggedIn, selectLoggedInUserName } from '../../reducers';
-import { loginRequest } from '../../actions/user.actions';
+import { loginRequest, logoutRequested } from '../../actions/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -28,5 +28,9 @@ export class LoginComponent implements OnInit {
     usernameEL.value = '';
     passwordEl.value = '';
 
+  }
+
+  logout() {
+    this.store.dispatch(logoutRequested())
   }
 }
