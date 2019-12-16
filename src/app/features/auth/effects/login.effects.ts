@@ -3,11 +3,39 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import * as userActions from '../actions/user.actions';
 import { environment } from '../../../../environments/environment';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError, tap, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import * as appActions from '../../../actions/app.actions';
 @Injectable()
 export class LoginEffects {
+
+  checkForTokenOnApplicationStarted$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.applicationStarted),
+      map(() => localStorage.getItem('token')),
+      filter(token => token !== null && token !== ''),
+      map(token => extractUserDataFromJwt(token)),
+      map(user => userActions.loginRequestSucceeded(user))
+    )
+  );
+
+
+  removeToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.loginRequestFailed), // or ofType(userActions.loginRequestFailed, userActions.logoutRequest)
+      tap(() => localStorage.setItem('token', ''))
+    ), { dispatch: false }
+  );
+
+  storeToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.loginRequestSucceeded),
+      tap(a => localStorage.setItem('token', a.token)
+      )
+    ), { dispatch: false }
+  );
+
+
 
   // loginRequest -> (loginRequest Succeeded | loginRequestFailed)
   loginRequest$ = createEffect(() =>
@@ -15,7 +43,7 @@ export class LoginEffects {
       ofType(userActions.loginRequest),
       switchMap((a) => this.client.post<{ access_token: string }>(environment.authUrl, { username: a.username, password: a.password })
         .pipe(
-          map(r => userActions.loginRequestSucceeded({ username: a.username, token: r.access_token })),
+          map(r => userActions.loginRequestSucceeded(extractUserDataFromJwt(r.access_token))),
           catchError(() => of(userActions.loginRequestFailed({ message: 'Bad Username or Password' })))
         )
       )
@@ -23,4 +51,12 @@ export class LoginEffects {
     , { dispatch: true });
 
   constructor(private actions$: Actions, private client: HttpClient) { }
+}
+
+
+function extractUserDataFromJwt(token: string): { username: string, token: string } {
+  const info = token.split('.')[1];
+
+  const obj = JSON.parse(atob(info)) as { username: string };
+  return { username: obj.username, token };
 }
