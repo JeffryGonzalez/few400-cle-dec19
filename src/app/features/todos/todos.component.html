@@ -11,6 +11,9 @@
 
 <section>
   <ul class="list-unstyled">
-    <li class="alert alert-info">Description</li>
+    <li class="alert alert-info"
+        *ngFor="let todo of list$ | async">
+      {{todo.description}}
+    </li>
   </ul>
 </section>
