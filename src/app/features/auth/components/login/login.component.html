@@ -4,6 +4,7 @@
          class="col-sm-1 col-form-label">User Name</label>
   <div class="col-sm-2">
     <input id="username"
+           #username
            class="form-control">
   </div>
   <label for="password"
@@ -11,9 +12,11 @@
   <div class="col-sm-2">
     <input id="password"
            type="password"
+           #password
            class="form-control">
   </div>
   <input type="button"
+         (click)="login(username, password)"
          class="btn btn-success"
          value="Login">
 </div>
