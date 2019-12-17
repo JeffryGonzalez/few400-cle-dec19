@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthModule } from './features/auth/auth.module';
 import { EffectsModule } from '@ngrx/effects';
 import { httpInterceptorProviders } from './interceptors';
+import { AuthGuard } from './auth.guard';
 @NgModule({
   declarations: [
     AppComponent
@@ -20,10 +21,10 @@ import { httpInterceptorProviders } from './interceptors';
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([]),
-    AuthModule,
+    AuthModule.forRoot(),
     TodosModule
   ],
-  providers: [httpInterceptorProviders],
+  providers: [httpInterceptorProviders, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

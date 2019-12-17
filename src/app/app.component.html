@@ -6,7 +6,8 @@
 <main class="container">
   <nav>
     <ul class="nav">
-      <li class="nav-item">
+      <li class="nav-item"
+          *ngIf="isLoggedIn$ | async">
         <a class="nav-link"
            [routerLinkActive]="['active']"
            [routerLink]="['todos']">Todos</a>
