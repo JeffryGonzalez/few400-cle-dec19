@@ -11,9 +11,13 @@ import { AuthModule } from './features/auth/auth.module';
 import { EffectsModule } from '@ngrx/effects';
 import { httpInterceptorProviders } from './interceptors';
 import { AuthGuard } from './auth.guard';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { CustomSerializer } from './custom.serializer';
+import { CustomersComponent } from './components/customers/customers.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CustomersComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +26,11 @@ import { AuthGuard } from './auth.guard';
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([]),
     AuthModule.forRoot(),
-    TodosModule
+    TodosModule,
+    StoreRouterConnectingModule.forRoot({
+      serializer: CustomSerializer,
+      stateKey: 'router'
+    })
   ],
   providers: [httpInterceptorProviders, AuthGuard],
   bootstrap: [AppComponent]
