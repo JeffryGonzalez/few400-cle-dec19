@@ -28,7 +28,7 @@ import { CustomersComponent } from './components/customers/customers.component';
     AuthModule.forRoot(),
     TodosModule,
     StoreRouterConnectingModule.forRoot({
-      serializer: CustomSerializer,
+      // serializer: CustomSerializer,
       stateKey: 'router'
     })
   ],
